@@ -1,0 +1,79 @@
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.pyc
+*.jar
+
+# Auto generated files #
+########################
+docs/_build/*
+.buildinfo
+.doctrees
+*.mo
+
+# Logs, databases, packages #
+#############################
+*.log
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+*.egg
+*.egg-info
+*.swp
+
+# OS generated files #
+######################
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+mangrovedb
+
+
+# backup & tmp files #
+######################
+*~
+\#*\#
+*.orig
+*.tmp
+.sass-cache
+
+# OS/editor specific files #
+############################
+ve/
+build/*
+pip-log.txt
+xunit*.xml
+.coverage
+coverage.xml
+.idea
+screenshots
+
+# gitflow specific files #
+##########################
+gitflow/
+
+# Local settings files #
+########################
+localsettings.py
+local_settings.py
+
+# Local cache files #
+#####################
+nigeria_regions.json
+
+# Local data files #
+#####################
+src/nmis/data
+
+# SCSS Generated Files #
+src/datawinners/.sass-cache/
+
+# Emacs files
+.ropeproject
