@@ -120,6 +120,7 @@ def _http_call(url, method, authorization, **kw):
         req.add_header('Authorization', 'OAuth2 %s' % authorization)
     if boundary:
         req.add_header('Content-Type', 'multipart/form-data; boundary=%s' % boundary)
+    print req.get_full_url()
     resp = urllib2.urlopen(req)
     body = resp.read()
     r = json.loads(body, object_hook=_obj_hook)

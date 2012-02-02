@@ -9,7 +9,7 @@ urls = (
 app = web.application(urls, globals())
 
 if web.config.get('_session') is None:
-    session = web.session.Session(app, web.session.DiskStore('weibo'))
+    session = web.session.Session(app, web.session.DiskStore('cache'))
     web.config._session = session
 else:
     session = web.config._session

@@ -46,6 +46,7 @@ mangrovedb
 
 # OS/editor specific files #
 ############################
+weibo/cache
 ve/
 build/*
 pip-log.txt
