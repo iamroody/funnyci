@@ -1,5 +1,7 @@
-from datetime import datetime
+# -*- coding: utf-8 -*-
+
 import web
+from datetime import datetime
 from config import APP_KEY, APP_SECRET, CALL_BACK_URL
 from weibo_oauth2 import APIClient
 
@@ -17,7 +19,7 @@ class Index:
             print "find session"
             client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALL_BACK_URL)
             client.set_access_token(access_token=access_token, expires_in=expires_in)
-            s = u'- %s -haha, this is a post from home ideas ci' % datetime.now().ctime()
+            s = u'- %s - 哈哈，可以说中文哦~ this is a post from home ideas ci' % datetime.now().ctime()
             client.post.statuses__update(status=s)
 
 

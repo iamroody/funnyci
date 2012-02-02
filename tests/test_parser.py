@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 import unittest
 from parser import Parser
@@ -26,4 +28,4 @@ class testParser(unittest.TestCase):
         self.assertEqual(status['package'], "success")
 
     def test_date(self):
-        print u'- %s - haha, this is a post from home' % datetime.now().ctime()
+        print u'- %s - haha, this is a 中文t from home' % datetime.now().ctime()
