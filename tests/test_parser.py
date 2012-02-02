@@ -16,16 +16,6 @@ class testParser(unittest.TestCase):
     def setUp(self):
         self.parser = Parser()
 
-    def test_get_stageStatus_building_from_xml_string_when_activity_is_Building(self):
-        data = createTestData(activity="Building", lastBuildStatus="Success")
-        stageStatus = self.parser.get_stageStatus_from_xml_string(data)
-        self.assertEqual(stageStatus['package'], "building")
-
-    def test_get_stageStatus_from_xml_string_when_activity_is_not_building(self):
-        data = createTestData(activity="Sleeping", lastBuildStatus="Success")
-        stageStatus = self.parser.get_stageStatus_from_xml_string(data)
-        self.assertEqual(stageStatus['package'], "success")
-
     def test_get_ci_model_from_xml_string(self):
         data = createTestData(activity="Sleeping", lastBuildStatus="Success")
         ciModel = self.parser.get_ci_model_from_xml_string(data)

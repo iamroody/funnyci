@@ -8,9 +8,6 @@ class CiModel:
         self.lastBuildStatus = lastBuildStatus
         self.lastBuildTime = lastBuildTime
 
-    def get_activity(self):
-        return self.activity
-
     def get_stage_status(self):
         stageStatus = {}
         for job in jobs:
@@ -18,6 +15,9 @@ class CiModel:
             stageStatus[job] = status
 
         return stageStatus
+
+    def get_build_version(self):
+        return self.lastBuildLabel
 
 
 class Parser(object):
@@ -40,23 +40,3 @@ class Parser(object):
         ciModel = CiModel(activity, lastBuildLabel, lastBuildStatus, lastBuildTime)
 
         return ciModel
-
-    def get_stageStatus_from_xml_string(self, data):
-        dom = minidom.parseString(data)
-        stageStatus = {}
-
-        for node in dom.getElementsByTagName('Project'):
-            stage = node.getAttribute('name')
-            for job in jobs:
-                if stage == 'home-ideas :: ' + job:
-                    activity = node.getAttribute('activity')
-                    last_build_status = node.getAttribute('lastBuildStatus')
-                    stageStatus[job] = self.get_stage_status(activity, last_build_status)
-
-        return stageStatus
-
-    def get_stage_status(self, activity, last_build):
-        if activity == 'Building':
-            return 'building'
-        return last_build.lower()
-
