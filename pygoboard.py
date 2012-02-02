@@ -2,8 +2,8 @@ import urllib2, socket, random
 import json, datetime, os, sys
 import traceback
 from xml.dom import minidom
+from static import jobs
 
-jobs = ['package', 'acceptance_standalone', 'acceptance_staging']
 go_url = 'http://go.hi-ci.vpc.realestate.com.au:8153/go/cctray.xml'
 oldBuildVersions = {}
 
