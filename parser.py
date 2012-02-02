@@ -1,27 +1,11 @@
 from xml.dom import minidom
+from cimodel import CiModel
 from static import jobs
-
-class CiModel:
-    def __init__(self, activity, lastBuildLabel, lastBuildStatus, lastBuildTime):
-        self.activity = activity
-        self.lastBuildLabel = lastBuildLabel
-        self.lastBuildStatus = lastBuildStatus
-        self.lastBuildTime = lastBuildTime
-
-    def get_stage_status(self):
-        stageStatus = {}
-        for job in jobs:
-            status = self.lastBuildStatus[job].lower() if self.activity[job] != 'Building' else 'building'
-            stageStatus[job] = status
-
-        return stageStatus
-
-    def get_build_version(self):
-        return self.lastBuildLabel
 
 
 class Parser(object):
-    def get_ci_model_from_xml_string(self, data):
+    @staticmethod
+    def generate_ci_model_from_xml_string(data):
         dom = minidom.parseString(data)
         activity = {}
         lastBuildStatus = {}

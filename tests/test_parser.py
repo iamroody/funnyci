@@ -1,3 +1,4 @@
+from datetime import datetime
 import unittest
 from parser import Parser
 
@@ -18,10 +19,11 @@ class testParser(unittest.TestCase):
 
     def test_get_ci_model_from_xml_string(self):
         data = createTestData(activity="Sleeping", lastBuildStatus="Success")
-        ciModel = self.parser.get_ci_model_from_xml_string(data)
+        ciModel = self.parser.generate_ci_model_from_xml_string(data)
         self.assertEqual(ciModel.activity['package'], "Sleeping")
         self.assertEqual(ciModel.lastBuildStatus['acceptance_standalone'], "Success")
         status = ciModel.get_stage_status()
         self.assertEqual(status['package'], "success")
 
-
+    def test_date(self):
+        print u'- %s - haha, this is a post from home' % datetime.now().ctime()
