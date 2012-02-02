@@ -1,4 +1,3 @@
-from datetime import datetime
 import web
 from config import APP_KEY, APP_SECRET, CALL_BACK_URL
 from weibo_oauth2 import APIClient
@@ -17,7 +16,8 @@ class Index:
             print "find session"
             client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALL_BACK_URL)
             client.set_access_token(access_token=access_token, expires_in=expires_in)
-            print client.get.statuses__user_timeline()
+            s = u'haha, this is a post from home'
+            client.post.statuses__update(status=s)
 
 
 class CallBack:
@@ -31,6 +31,7 @@ class CallBack:
 
         web.config._session.access_token = token.access_token
         web.config._session.expires_in = token.expires_in
+
         print "go to index"
 
         web.seeother("/")

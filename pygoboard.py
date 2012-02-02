@@ -2,6 +2,7 @@ import pickle
 import socket
 import sys
 import traceback
+import webbrowser
 from parser import Parser
 from static import jobs
 
@@ -60,6 +61,8 @@ if __name__ == '__main__':
             print "*** running ***"
             build_status = getBuildStatus(go_status)
             print "weibo will post a weibo with status %s" % build_status
+            webbrowser.open_new("http://127.0.0.1:8080/")
+
     except Exception, (error):
         traceback.print_exc(file=sys.stdout)
 
