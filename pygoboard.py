@@ -7,10 +7,13 @@ from static import jobs
 
 
 def getOldVersion():
-    f = open('tmp/buildversion', 'r')
-    version = pickle.load(f)
-    f.close()
-    return version
+    try:
+        f = open('tmp/buildversion', 'r')
+        version = pickle.load(f)
+        f.close()
+        return version
+    except EOFError:
+        return {}
 
 
 def writeVersionToFile(currentBuildVersions):
@@ -56,6 +59,7 @@ if __name__ == '__main__':
             build_status = "off"
             print "*** running ***"
             build_status = getBuildStatus(go_status)
+            print "weibo will post a weibo with status %s" % build_status
     except Exception, (error):
         traceback.print_exc(file=sys.stdout)
 
