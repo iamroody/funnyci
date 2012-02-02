@@ -2,6 +2,7 @@ import urllib2, socket, random
 import json, datetime, os, sys
 import traceback
 from xml.dom import minidom
+from parser import Parser
 from static import jobs
 
 go_url = 'http://go.hi-ci.vpc.realestate.com.au:8153/go/cctray.xml'
@@ -36,27 +37,31 @@ if __name__ == '__main__':
     try:
         socket.setdefaulttimeout(5)
 
-        go_status,currentBuildVersions = get_status_from_xml()
+        document = open("building-go.xml").read()
 
-        if is_build_version_changed(currentBuildVersions, oldBuildVersions):
-            print "first "
-            oldBuildVersions = currentBuildVersions
+        parser = Parser()
 
-            build_status = "off"
+        go_status = parser.get_ci_model_from_xml_string(document).get_stage_status()
+        currentBuildVersions = parser.get_ci_model_from_xml_string(document).lastBuildLabel
 
-            print "*** running ***"
+        oldBuildVersions = currentBuildVersions
 
-            if all(go_status[job] == 'success' for job in jobs):
-                build_status = 'success'
-            elif any(go_status[job] == 'building' for job in jobs):
-                if any(go_status[job] == 'failure' for job in jobs):
-                    build_status = 'warning'
-                else:
-                    build_status = 'building'
-            elif any(go_status[job] == 'failure' for job in jobs):
-                build_status = 'failure'
-            else:
+        build_status = "off"
+
+        print "*** running ***"
+
+        if all(go_status[job] == 'success' for job in jobs):
+            build_status = 'success'
+        elif any(go_status[job] == 'building' for job in jobs):
+            if any(go_status[job] == 'failure' for job in jobs):
                 build_status = 'warning'
-        print "not changed"
+            else:
+                build_status = 'building'
+        elif any(go_status[job] == 'failure' for job in jobs):
+            build_status = 'failure'
+        else:
+            build_status = 'warning'
+
+        print build_status
     except Exception, (error):
         traceback.print_exc(file=sys.stdout)
