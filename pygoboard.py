@@ -2,7 +2,7 @@ import socket
 import sys
 import traceback
 import urllib2
-import webbrowser
+import urllib
 from parser import Parser
 from static import BUILD_VERSION_PATH, go_url
 from util import util
@@ -31,7 +31,7 @@ if __name__ == '__main__':
         if is_build_version_changed(currentBuildVersions):
             build_status = ciModel.getBuildStatus(go_status)
             print "weibo will post a weibo with status %s" % build_status
-            webbrowser.open_new("http://127.0.0.1:8080/")
+            urllib.urlopen("http://127.0.0.1:8080/")
         else:
             print "*** not changed ***"
 

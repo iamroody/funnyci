@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import logging
+import webbrowser
 
 import web
 from datetime import datetime
@@ -11,12 +13,12 @@ class Index:
         expires_in = web.config._session.get('expires_in', None)
 
         if not access_token:
-            print "no session, prepaire go to call back"
+            logging.info("no session, prepaire go to call back")
             client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALL_BACK_URL)
             auth_url = client.get_authorize_url()
-            web.redirect(auth_url)
+            webbrowser.open_new(auth_url)
         else:
-            print "find session"
+            logging.info("find session")
             client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALL_BACK_URL)
             client.set_access_token(access_token=access_token, expires_in=expires_in)
             s = u'- %s - 哈哈，可以说中文哦~ this is a post from home ideas ci' % datetime.now().ctime()
@@ -25,7 +27,7 @@ class Index:
 
 class CallBack:
     def GET(self):
-        print "call back"
+        logging.info("call back")
 
         i = web.input()
         code = i.get('code', None)
@@ -34,7 +36,6 @@ class CallBack:
 
         web.config._session.access_token = token.access_token
         web.config._session.expires_in = token.expires_in
-
-        print "go to index"
+        logging.info("go to index")
 
         web.seeother("/")

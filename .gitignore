@@ -11,6 +11,7 @@
 
 # Auto generated files #
 ########################
+
 docs/_build/*
 .buildinfo
 .doctrees
@@ -44,8 +45,9 @@ mangrovedb
 *.tmp
 .sass-cache
 
-# OS/editor specific files #
+# OS/editor specific files ## Local settings files #
 ############################
+tmp/*
 weibo/cache/*
 ve/
 build/*
@@ -60,7 +62,7 @@ screenshots
 ##########################
 gitflow/
 
-# Local settings files #
+
 ########################
 localsettings.py
 local_settings.py
