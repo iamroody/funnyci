@@ -1,8 +1,8 @@
+import random
 import socket
 import sys
 import traceback
-import urllib
-import webbrowser
+import urllib2
 from xml.dom import minidom
 import time
 from cimodel import CiModel
@@ -41,30 +41,33 @@ class Parser(object):
 
         return ciModel
 
+def getRandomTestXML():
+    file_name = ['building-go.xml', 'failed-go.xml', 'successful-go.xml', 'warning-go.xml']
+    return "test-data/%s" % random.choice(file_name)
+
 if __name__ == '__main__':
     try:
         socket.setdefaulttimeout(5)
 
-        while True:
-            data = open("building-go.xml").read()
-    #        data = urllib2.urlopen(urllib2.Request(go_url)).read()
+#        document = open("building-go.xml").read()
+        data = urllib2.urlopen(urllib2.Request('http://go.hi-ci.vpc.realestate.com.au:8153/go/cctray.xml')).read()
 
-            ciModel = Parser.generate_ci_model_from_xml_string(data)
-            go_status = ciModel.get_stage_status()
-            currentBuildVersions = ciModel.get_build_version()
+        ciModel = Parser.generate_ci_model_from_xml_string(data)
+        go_status = ciModel.get_stage_status()
+        currentBuildVersions = ciModel.get_build_version()
 
-            print "*** running ***"
+        print "*** running ***"
 
-            if is_build_version_changed(currentBuildVersions):
-                build_status = ciModel.getBuildStatus(go_status)
-                print "weibo will post a weibo with status %s" % build_status
-                util.writeToFile(BUILD_STATUS_PATH, build_status)
-                urllib.urlopen("http://127.0.0.1:8080/")
-            else:
-                print "*** not changed ***"
-                print build_status
+        if is_build_version_changed(currentBuildVersions):
+            build_status = ciModel.getBuildStatus(go_status)
+            print "weibo will post a weibo with status %s" % build_status
+            util.writeToFile(BUILD_STATUS_PATH, build_status)
+            urllib2.urlopen("http://127.0.0.1:8080/")
+        else:
+            print "*** not changed ***"
+            print build_status
 
-            time.sleep(5)
+        time.sleep(2)
 
     except Exception, (error):
         traceback.print_exc(file=sys.stdout)
