@@ -1,9 +1,10 @@
 import socket
 import sys
 import traceback
+import urllib2
 import webbrowser
 from parser import Parser
-from static import BUILD_VERSION_PATH
+from static import BUILD_VERSION_PATH, go_url
 from util import util
 
 def is_build_version_changed(currentBuildVersions):
@@ -18,7 +19,8 @@ if __name__ == '__main__':
     try:
         socket.setdefaulttimeout(5)
 
-        data = open("building-go.xml").read()
+#        data = open("building-go.xml").read()
+        data = urllib2.urlopen(urllib2.Request(go_url)).read()
 
         ciModel = Parser.generate_ci_model_from_xml_string(data)
         go_status = ciModel.get_stage_status()
