@@ -1,14 +1,22 @@
 # -*- coding: utf-8 -*-
 import logging
 import webbrowser
-
+import sys
+import os
 import web
+
+PROJECT_DIR = os.path.dirname(__file__)
+sys.path.append(os.path.join(PROJECT_DIR, '../'))
+
 from datetime import datetime
 from config import APP_KEY, APP_SECRET, CALL_BACK_URL
 from weibo_oauth2 import APIClient
+from static import BUILD_STATUS_PATH
+from util import util
 
 class Index:
     def GET(self):
+
         access_token = web.config._session.get('access_token', None)
         expires_in = web.config._session.get('expires_in', None)
 
@@ -21,7 +29,8 @@ class Index:
             logging.info("find session")
             client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALL_BACK_URL)
             client.set_access_token(access_token=access_token, expires_in=expires_in)
-            s = u'- %s - 哈哈，可以说中文哦~ this is a post from home ideas ci' % datetime.now().ctime()
+            build_status = util.readFromFile(BUILD_STATUS_PATH)
+            s = u'- %s - 当前build的状态是 %s' % (datetime.now().ctime(), build_status)
             client.post.statuses__update(status=s)
 
 

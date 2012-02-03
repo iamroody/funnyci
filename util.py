@@ -16,4 +16,16 @@ class util:
         f = open(path, 'wb')
         pickle.dump(dictionary, f)
         f.close()
-    
+
+    @staticmethod
+    def writeToFile(path, message):
+        f = open(path, 'wb')
+        f.write(message)
+        f.close()
+
+    @staticmethod
+    def readFromFile(path):
+        f = open(path, 'r')
+        content = f.readline()
+        f.close()
+        return content

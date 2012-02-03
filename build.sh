@@ -9,10 +9,7 @@ function run_test {
 }
 
 function run {
-    while true;do
-        python pygoboard.py;
-        sleep 2;
-    done
+    python pygoboard.py;
 }
 
 function show_help {
