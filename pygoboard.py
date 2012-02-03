@@ -58,7 +58,8 @@ if __name__ == '__main__':
             if is_build_version_changed(currentBuildVersions):
                 build_status = ciModel.getBuildStatus(go_status)
                 print "weibo will post a weibo with status %s" % build_status
-                webbrowser.open_new("http://127.0.0.1:8080/")
+                util.writeToFile(BUILD_STATUS_PATH, build_status)
+                urllib.urlopen("http://127.0.0.1:8080/")
             else:
                 print "*** not changed ***"
                 print build_status
