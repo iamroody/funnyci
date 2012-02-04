@@ -4,6 +4,7 @@ import datetime
 
 import simplejson
 import twitter
+from config import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET
 
 if __name__ == '__main__':
     # #debug:
@@ -14,10 +15,10 @@ if __name__ == '__main__':
     #                        use_gzip_compression=True)
 
     #bear:
-    api      = twitter.Api(consumer_key='aiQ3DrdYz0H7Bd5rIw',
-                           consumer_secret='oTTLt6OFAxLJTMXm2vgxsUShXfrQxySWPfWgrXgYvM',
-                           access_token_key='481117614-qhuFbXMCzu56m9GWfjfCgVfT57yWBMTypJsalfth',
-                           access_token_secret='MY22DMwFj8a36XCrmpl1jXYYWZvldm8ZbGACL6gZaPA',
+    api      = twitter.Api(consumer_key=CONSUMER_KEY,
+                           consumer_secret=CONSUMER_SECRET,
+                           access_token_key=ACCESS_TOKEN_KEY,
+                           access_token_secret=ACCESS_TOKEN_SECRET,
                            debugHTTP=True)
 
     print api.VerifyCredentials()

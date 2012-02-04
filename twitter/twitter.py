@@ -15,6 +15,7 @@
 # limitations under the License.
 
 '''A library that provides a Python interface to the Twitter API'''
+from config import PROXY, PROXY_PROTOCOL
 
 __author__ = 'python-twitter@googlegroups.com'
 __version__ = '0.8.2'
@@ -3737,7 +3738,7 @@ class Api(object):
 
     http_handler  = self._urllib.HTTPHandler(debuglevel=_debug)
     https_handler = self._urllib.HTTPSHandler(debuglevel=_debug)
-    proxy_handler = self._urllib.ProxyHandler({'http':'10.18.0.254:3128'})
+    proxy_handler = self._urllib.ProxyHandler({PROXY_PROTOCOL:PROXY})
 
     opener = self._urllib.OpenerDirector()
     opener.add_handler(proxy_handler)
