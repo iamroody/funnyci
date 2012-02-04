@@ -1,73 +1,66 @@
 import random
 import socket
+import subprocess
 import sys
+import threading
 import traceback
 import urllib2
-from xml.dom import minidom
 import time
-from cimodel import CiModel
-from static import BUILD_VERSION_PATH, jobs, BUILD_STATUS_PATH
+from parser import Parser
+from service import is_build_version_changed, getRandomTestXML
+from static import BUILD_STATUS_PATH, Say_Message, Twitter_Message
+from twitter.t import Twitter
 from util import util
 
-global build_status
-build_status = "off"
+def threadWeiBo():
+    urllib2.urlopen("http://127.0.0.1:8080/")
 
-def is_build_version_changed(currentBuildVersions):
-    oldVersion = util.getDictionaryFromFile(BUILD_VERSION_PATH)
-    if not oldVersion.__eq__(currentBuildVersions):
-        util.writeDictionaryToFile(currentBuildVersions, BUILD_VERSION_PATH)
-        return True
-    return False
 
-class Parser(object):
-    @staticmethod
-    def generate_ci_model_from_xml_string(data):
-        dom = minidom.parseString(data)
-        activity = {}
-        lastBuildStatus = {}
-        lastBuildLabel = {}
-        lastBuildTime = {}
+def threadSay(build_status):
+    command = "say %s" % Say_Message[build_status]
+    subprocess.call(command, shell=True)
 
-        for node in dom.getElementsByTagName('Project'):
-            stage = node.getAttribute('name')
-            for job in jobs:
-                if stage == 'home-ideas :: ' + job:
-                    activity[job] = node.getAttribute('activity')
-                    lastBuildStatus[job] = node.getAttribute('lastBuildStatus')
-                    lastBuildLabel[job] = node.getAttribute('lastBuildLabel')
-                    lastBuildTime[job] = node.getAttribute('lastBuildTime')
 
-        ciModel = CiModel(activity, lastBuildLabel, lastBuildStatus, lastBuildTime)
+def threadTwitter(build_status):
+    status = Twitter_Message[build_status]
+    Twitter.postTwitterUpdate(status)
 
-        return ciModel
 
-def getRandomTestXML():
-    file_name = ['building-go.xml', 'failed-go.xml', 'successful-go.xml', 'warning-go.xml']
-    return "test-data/%s" % random.choice(file_name)
+def createTaskThreads(build_status):
+    say = threading.Thread(target=threadSay, args=(build_status,))
+    say.start()
+    weibo = threading.Thread(target=threadWeiBo)
+    weibo.start()
+    twitter = threading.Thread(target=threadTwitter)
+    twitter.start()
+
 
 if __name__ == '__main__':
     try:
         socket.setdefaulttimeout(5)
 
-#        document = open("building-go.xml").read()
-        data = urllib2.urlopen(urllib2.Request('http://go.hi-ci.vpc.realestate.com.au:8153/go/cctray.xml')).read()
+        while True:
+            build_status = "off"
+            data = open(getRandomTestXML()).read()
+            #            data = urllib2.urlopen(urllib2.Request('http://go.hi-ci.vpc.realestate.com.au:8153/go/cctray.xml')).read()
 
-        ciModel = Parser.generate_ci_model_from_xml_string(data)
-        go_status = ciModel.get_stage_status()
-        currentBuildVersions = ciModel.get_build_version()
+            ciModel = Parser.generate_ci_model_from_xml_string(data)
+            go_status = ciModel.get_stage_status()
+            currentBuildVersions = ciModel.get_build_version()
 
-        print "*** running ***"
+            print "*** running ***"
 
-        if is_build_version_changed(currentBuildVersions):
-            build_status = ciModel.getBuildStatus(go_status)
-            print "weibo will post a weibo with status %s" % build_status
-            util.writeToFile(BUILD_STATUS_PATH, build_status)
-            urllib2.urlopen("http://127.0.0.1:8080/")
-        else:
-            print "*** not changed ***"
-            print build_status
+            if is_build_version_changed(currentBuildVersions):
+                build_status = ciModel.getBuildStatus(go_status)
+                print "weibo will post a weibo with status %s" % build_status
+                util.writeToFile(BUILD_STATUS_PATH, build_status)
+                createTaskThreads(build_status)
 
-        time.sleep(2)
+            else:
+                print "*** not changed ***"
+                print build_status
+
+            time.sleep(5)
 
     except Exception, (error):
         traceback.print_exc(file=sys.stdout)

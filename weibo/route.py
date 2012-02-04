@@ -11,7 +11,7 @@ sys.path.append(os.path.join(PROJECT_DIR, '../'))
 from datetime import datetime
 from config import APP_KEY, APP_SECRET, CALL_BACK_URL
 from weibo_oauth2 import APIClient
-from static import BUILD_STATUS_PATH, Message
+from static import BUILD_STATUS_PATH, Weibo_Message
 from util import util
 
 class Index:
@@ -30,7 +30,7 @@ class Index:
             client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, redirect_uri=CALL_BACK_URL)
             client.set_access_token(access_token=access_token, expires_in=expires_in)
             build_status = util.readFromFile(BUILD_STATUS_PATH)
-            content = u'- %s - %s' % (datetime.now().ctime(), Message[build_status])
+            content = u'- %s - %s' % (datetime.now().ctime(), Weibo_Message[build_status])
             client.post.statuses__update(status=content)
 
         return u"success-%s" % content
