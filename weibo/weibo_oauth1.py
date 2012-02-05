@@ -37,7 +37,7 @@ class OAuthToken(object):
         attrs = [s for s in dir(self) if not s.startswith('__')]
         kvs = ['%s = %s' % (k, getattr(self, k)) for k in attrs]
         return ', '.join(kvs)
-
+    
     __repr__ = __str__
 
 class APIClient(object):

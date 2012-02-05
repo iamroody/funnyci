@@ -1,6 +1,6 @@
 from xml.dom import minidom
 from cimodel import CiModel
-from static import jobs
+from static import JOBS
 
 
 class Parser(object):
@@ -14,7 +14,7 @@ class Parser(object):
 
         for node in dom.getElementsByTagName('Project'):
             stage = node.getAttribute('name')
-            for job in jobs:
+            for job in JOBS:
                 if stage == 'home-ideas :: ' + job:
                     activity[job] = node.getAttribute('activity')
                     lastBuildStatus[job] = node.getAttribute('lastBuildStatus')

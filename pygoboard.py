@@ -4,16 +4,15 @@ import subprocess
 import sys
 import threading
 import traceback
-import urllib2
 import time
+import urllib2
 from parser import Parser
-from service import is_build_version_changed, getRandomTestXML
-from static import BUILD_STATUS_PATH, Say_Message, Twitter_Message
-from twitter.t import Twitter
-from util import util
+from static import Say_Message, REAL_GO, TEST_FILES
+from twitter.twitter import Twitter
+from weibo.weibo import WeiBo
 
-def threadWeiBo():
-    urllib2.urlopen("http://127.0.0.1:8080/")
+def threadWeiBo(build_status):
+    WeiBo.postWeiboUpdate(build_status)
 
 
 def threadSay(build_status):
@@ -22,27 +21,35 @@ def threadSay(build_status):
 
 
 def threadTwitter(build_status):
-    status = Twitter_Message[build_status]
-    Twitter.postTwitterUpdate(status)
+    Twitter.postTwitterUpdate(build_status)
 
 
 def createTaskThreads(build_status):
     say = threading.Thread(target=threadSay, args=(build_status,))
     say.start()
-    weibo = threading.Thread(target=threadWeiBo)
+    weibo = threading.Thread(target=threadWeiBo, args=(build_status,))
     weibo.start()
-    twitter = threading.Thread(target=threadTwitter)
+    twitter = threading.Thread(target=threadTwitter, args=(build_status,))
     twitter.start()
+
+
+def readTestData():
+    file_path = "test-data/%s" % random.choice(TEST_FILES)
+    return open(file_path).read()
+
+
+def readRealData():
+    return urllib2.urlopen(REAL_GO).read()
 
 
 if __name__ == '__main__':
     try:
         socket.setdefaulttimeout(5)
+        oldBuildVersions = {}
+        build_status = "off"
 
         while True:
-            build_status = "off"
-            data = open(getRandomTestXML()).read()
-            #            data = urllib2.urlopen(urllib2.Request('http://go.hi-ci.vpc.realestate.com.au:8153/go/cctray.xml')).read()
+            data = readTestData()
 
             ciModel = Parser.generate_ci_model_from_xml_string(data)
             go_status = ciModel.get_stage_status()
@@ -50,15 +57,14 @@ if __name__ == '__main__':
 
             print "*** running ***"
 
-            if is_build_version_changed(currentBuildVersions):
+            if not currentBuildVersions.__eq__(oldBuildVersions):
+                print "*** it seems that there is a new build ***"
                 build_status = ciModel.getBuildStatus(go_status)
-                print "weibo will post a weibo with status %s" % build_status
-                util.writeToFile(BUILD_STATUS_PATH, build_status)
+                print "*** it seems that current build status is %s" % build_status
                 createTaskThreads(build_status)
-
+                oldBuildVersions = currentBuildVersions
             else:
-                print "*** not changed ***"
-                print build_status
+                print "*** it seems that nothing happen ***"
 
             time.sleep(5)
 
