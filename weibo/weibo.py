@@ -8,5 +8,5 @@ class WeiBo:
     def postWeiboUpdate(build_status):
         access_token = OAuthToken(oauth_token=ACCESS_TOKEN, oauth_token_secret=ACCESS_TOKEN_SECRET)
         client = APIClient(app_key=APP_KEY, app_secret=APP_SECRET, token=access_token)
-        content = u'- %s - %s' % (datetime.now().ctime(), Weibo_Message[build_status])
+        content = u'%s - %s' % (Weibo_Message[build_status], datetime.now().ctime())
         client.post.statuses__update(status=content)

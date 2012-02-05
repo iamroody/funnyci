@@ -1,6 +1,7 @@
 #!/bin/bash
 
 function env {
+    which pip || easy_install pip
     pip install -r requirements.pip
 }
 
