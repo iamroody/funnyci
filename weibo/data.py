@@ -8,6 +8,6 @@ Weibo_Message = {
 }
 
 GEOGRAPHY = {
-    "lat": "34.190749",
-    "long": "108.877291"
+    "lat": 34.190749,
+    "long": 108.877291
 }

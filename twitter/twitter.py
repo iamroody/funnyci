@@ -11,7 +11,7 @@ class Twitter:
                               access_token_key=ACCESS_TOKEN_KEY,
                               access_token_secret=ACCESS_TOKEN_SECRET,
                               debugHTTP=True)
-        content = u'- %s - %s' % (datetime.now().ctime(), Twitter_Message[build_status])
+        content = u'- %s - %s' % (Twitter_Message[build_status], datetime.now().ctime())
 
         api.PostUpdate(content)
 
