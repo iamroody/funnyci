@@ -1,6 +1,6 @@
 from datetime import datetime
 from config import ACCESS_TOKEN_SECRET, ACCESS_TOKEN, APP_KEY, APP_SECRET
-from static import Weibo_Message
+from data import Weibo_Message
 from weibo_oauth1 import OAuthToken, APIClient
 
 class WeiBo:

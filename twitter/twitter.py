@@ -1,6 +1,6 @@
-from datetime import datetime
 import twitter_api
-from static import Twitter_Message
+from datetime import datetime
+from data import Twitter_Message
 from config import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET
 
 class Twitter:

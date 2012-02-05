@@ -1,13 +1,13 @@
 import random
 import socket
-import subprocess
 import sys
 import threading
 import traceback
 import time
 import urllib2
 from parser import Parser
-from static import Say_Message, REAL_GO, TEST_FILES
+from say.say import Say
+from static import REAL_GO, TEST_FILES
 from twitter.twitter import Twitter
 from weibo.weibo import WeiBo
 
@@ -15,9 +15,12 @@ def threadWeiBo(build_status):
     WeiBo.postWeiboUpdate(build_status)
 
 
+def sayThis(build_status):
+    Say.sayThis(build_status)
+
+
 def threadSay(build_status):
-    command = "say %s" % Say_Message[build_status]
-    subprocess.call(command, shell=True)
+    sayThis(build_status)
 
 
 def threadTwitter(build_status):
