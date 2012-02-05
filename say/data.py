@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 Say_Message = {
     "building": u"Good luck ! Baby !",
     "warning": u"Some One is fixing build now ! Good luck !",

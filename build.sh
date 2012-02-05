@@ -8,7 +8,11 @@ function run_test {
     nosetests;
 }
 
-function run {
+function fake {
+    python pygoboard.py test;
+}
+
+function real {
     python pygoboard.py;
 }
 
@@ -18,14 +22,16 @@ function show_help {
   echo "COMMAND:"
   echo -e "env: check env and install dependency"
   echo -e "test: run all test"
-  echo -e "run: get status of ci, and send message to weibo or twitter"
+  echo -e "fake: read test data"
+  echo -e "real: read real go data"
 }
 
 function main {
 	case $1 in
 	    env) env;;
 		test) run_test;;
-		run) run;;
+		fake) fake;;
+		real) real;;
 		*) show_help ; exit 1;;
 	esac
 }

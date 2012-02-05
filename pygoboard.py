@@ -1,3 +1,4 @@
+import getopt
 import random
 import socket
 import sys
@@ -45,6 +46,12 @@ def readRealData():
     return urllib2.urlopen(REAL_GO).read()
 
 
+def readData():
+    opts, args = getopt.getopt(sys.argv[1:], '')
+    if args.__contains__("test"):
+        return readTestData()
+    return readRealData()
+
 if __name__ == '__main__':
     try:
         socket.setdefaulttimeout(5)
@@ -52,7 +59,7 @@ if __name__ == '__main__':
         build_status = "off"
 
         while True:
-            data = readTestData()
+            data = readData()
 
             ciModel = Parser.generate_ci_model_from_xml_string(data)
             go_status = ciModel.get_stage_status()

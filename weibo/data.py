@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 Weibo_Message = {
     "building": u"一次新的build开始了！有木有? 好运哦！ 亲！",
     "warning": u"有人在修Build，这次一定要绿哦！",
