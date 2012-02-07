@@ -76,7 +76,7 @@ if __name__ == '__main__':
             else:
                 print "*** it seems that nothing happen ***"
 
-            time.sleep(5)
+            time.sleep(20)
 
     except Exception, (error):
         traceback.print_exc(file=sys.stdout)
